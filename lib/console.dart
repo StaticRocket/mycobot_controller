@@ -47,10 +47,13 @@ class _ConsoleState extends State<Console> {
             child: Container(
               child: Form(
                 child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'Send a command'),
-                ),
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Send a command'),
+                    onSubmitted: (value) {
+                      _sendMessage();
+                    }),
               ),
             ),
           ),
