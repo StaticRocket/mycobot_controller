@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'console.dart';
 import 'axis_slider.dart';
+import 'button_mappings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,30 +39,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(children: [
+        body: Column(children: [
       Expanded(
-          child: Column(children: [
-        Console(
+        child: Console(
             channel: _channel,
             logList: _logList,
             sendMessage: _sendMessage,
             appendLog: _appendLog),
-        Row(children: [
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'X')),
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'Y')),
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'Z')),
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'A')),
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'B')),
-          IntrinsicWidth(
-              child: AxisSlider(sendMessage: _sendMessage, axis: 'C')),
-          //IntrinsicWidth(child:AxisSlider(axis: 'Speed')),
-        ]),
-      ]))
+      ),
+      Row(children: [
+        AxisSliderCard(sendMessage: _sendMessage),
+        ButtonCard(sendMessage: _sendMessage)
+      ]),
     ]));
   }
 

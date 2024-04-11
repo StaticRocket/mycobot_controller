@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+class AxisSliderCard extends StatefulWidget {
+  const AxisSliderCard({super.key, required this.sendMessage});
+  final Function sendMessage;
+
+  @override
+  State<AxisSliderCard> createState() => _AxisSliderCardState();
+}
+
+class _AxisSliderCardState extends State<AxisSliderCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Card(
+            child: Row(children: [
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'X'),
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'Y'),
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'Z'),
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'A'),
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'B'),
+      AxisSlider(sendMessage: widget.sendMessage, axis: 'C'),
+    ])));
+  }
+}
+
 class AxisSlider extends StatefulWidget {
   const AxisSlider({super.key, required this.axis, required this.sendMessage});
   final String axis;
