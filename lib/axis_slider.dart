@@ -46,14 +46,16 @@ class _AxisSliderState extends State<AxisSlider> {
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: Text(widget.axis),
       ),
-      RotatedBox(
-          quarterTurns: 3,
-          child: Slider(
-              value: degree,
-              min: -120,
-              max: 120,
-              onChanged: _updateDegree,
-              onChangeEnd: _sendMessage)),
+      Flexible(
+        child: RotatedBox(
+            quarterTurns: 3,
+            child: Slider(
+                value: degree,
+                min: -120,
+                max: 120,
+                onChanged: _updateDegree,
+                onChangeEnd: _sendMessage)),
+      ),
       Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Text(degree.toStringAsFixed(0)),
