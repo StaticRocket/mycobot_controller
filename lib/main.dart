@@ -3,6 +3,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'console.dart';
 import 'axis_slider.dart';
 import 'button_mappings.dart';
+import 'diagram.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,11 +42,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         body: Column(children: [
       Expanded(
-        child: Console(
-            channel: _channel,
-            logList: _logList,
-            sendMessage: _sendMessage,
-            appendLog: _appendLog),
+        child: Row(children: [
+          Expanded(child: DiagramCard()),
+          Expanded(
+            child: Console(
+                channel: _channel,
+                logList: _logList,
+                sendMessage: _sendMessage,
+                appendLog: _appendLog),
+          )
+        ]),
       ),
       Expanded(
           child: Row(children: [
