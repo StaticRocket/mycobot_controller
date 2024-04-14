@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _channel = WebSocketChannel.connect(Uri.parse('ws://er.lan:8765'));
+  final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
 
   @override
@@ -47,10 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
             sendMessage: _sendMessage,
             appendLog: _appendLog),
       ),
-      Row(children: [
+      Expanded(
+          child: Row(children: [
         AxisSliderCard(sendMessage: _sendMessage),
         ButtonCard(sendMessage: _sendMessage)
-      ]),
+      ])),
     ]));
   }
 

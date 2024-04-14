@@ -12,18 +12,33 @@ class ButtonCard extends StatefulWidget {
 class _ButtonCardState extends State<ButtonCard> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Card(
-            child: Row(mainAxisSize: MainAxisSize.max, children: [
-      Column(mainAxisSize: MainAxisSize.max, children: [
+    return Card(
+        child: Row(children: [
+      Column(children: [
         PositionButton(
             icon: const Icon(Icons.home),
             sendMessage: () {
               widget.sendMessage("G30");
-            })
+            }),
+        PositionButton(
+            icon: const Icon(Icons.flash_on),
+            sendMessage: () {
+              widget.sendMessage("M80");
+            }),
+        PositionButton(
+            icon: const Icon(Icons.flash_off),
+            sendMessage: () {
+              widget.sendMessage("M81");
+            }),
+        IconButton(
+          icon: const Icon(Icons.shuffle),
+          onPressed: _shuffle,
+        ),
       ])
-    ])));
+    ]));
   }
+
+  void _shuffle() {}
 }
 
 class PositionButton extends StatefulWidget {
