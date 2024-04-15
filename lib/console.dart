@@ -19,6 +19,23 @@ class Console extends StatefulWidget {
 
 class _ConsoleState extends State<Console> {
   final TextEditingController _controller = TextEditingController();
+  var _subscription;
+
+  @override
+  initState() {
+    super.initState();
+    _subscription = widget.channel.stream.listen((message) {
+      widget.appendLog("${message}");
+    });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+
+    _subscription.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,22 +44,15 @@ class _ConsoleState extends State<Console> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  StreamBuilder(
-                    stream: widget.channel.stream,
-                    builder: (context, snapshot) {
-                      widget.appendLog(
-                          snapshot.hasData ? '${snapshot.data}' : '');
-                      return Flexible(
-                          child: Container(
-                              child: ListView.builder(
-                        reverse: true,
-                        itemCount: widget.logList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Text('${widget.logList[index]}');
-                        },
-                      )));
+                  Flexible(
+                      child: Container(
+                          child: ListView.builder(
+                    reverse: true,
+                    itemCount: widget.logList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Text('${widget.logList[index]}');
                     },
-                  ),
+                  ))),
                   const SizedBox(height: 8),
                   IntrinsicHeight(
                     child: Row(children: [

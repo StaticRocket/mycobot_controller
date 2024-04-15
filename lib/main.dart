@@ -96,8 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _appendLog(String entry) {
-    _logList.insert(0, entry);
-    while (_logList.length > 50) _logList.removeAt(0);
+    setState(() {
+      _logList.insert(0, entry);
+    });
   }
 
   Future<void> _toggleDemo() async {
