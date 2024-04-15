@@ -36,6 +36,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
+  final _axisValues = {
+    'X': 0.0,
+    'Y': 0.0,
+    'Z': 0.0,
+    'A': 0.0,
+    'B': 0.0,
+    'C': 0.0
+  };
+
+  void _setAxis(String axis, double value, bool immediate) {
+    _axisValues[axis] = value;
+    if (immediate) {
+      _sendMessage('G1 ${axis}${value.toStringAsFixed(0)}');
+    }
+  }
+
+  double _getAxis(String axis) {
+    double? value = _axisValues[axis];
+    if (value is double) return value;
+    return 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       Expanded(
           child: Row(children: [
-        AxisSliderCard(sendMessage: _sendMessage),
+        AxisSliderCard(
+          getAxis: _getAxis,
+          setAxis: _setAxis,
+        ),
         ButtonCard(sendMessage: _sendMessage)
       ])),
     ]));
