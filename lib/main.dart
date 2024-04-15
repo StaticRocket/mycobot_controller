@@ -85,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ButtonCard(
             sendMessage: _sendMessage,
             toggleDemo: _toggleDemo,
-            demoBool: _isDemoMode),
+            demoBool: _isDemoMode,
+            appendLog: _appendLog),
       ])),
     ]));
   }

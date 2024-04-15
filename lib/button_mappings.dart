@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -6,9 +7,11 @@ class ButtonCard extends StatefulWidget {
       {super.key,
       required this.sendMessage,
       required this.toggleDemo,
+      required this.appendLog,
       required this.demoBool});
   final Function sendMessage;
   final Function toggleDemo;
+  final Function appendLog;
   final bool demoBool;
 
   @override
@@ -64,7 +67,18 @@ class _ButtonCardState extends State<ButtonCard> {
   }
 
   void _rockPaperSissors() {
-    //
+    int selection = Random().nextInt(3);
+    switch (selection) {
+      case 0:
+        widget.appendLog("~ I picked rock!");
+        break;
+      case 1:
+        widget.appendLog("~ I picked paper!");
+        break;
+      case 2:
+        widget.appendLog("~ I picked scissors!");
+        break;
+    }
   }
 }
 
