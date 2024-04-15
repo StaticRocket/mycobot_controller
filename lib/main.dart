@@ -113,6 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
     while (_isDemoMode) {
       Map<String, double> pose = DemoPoses.poses[index];
       await _smoothStep(_axisValues, pose);
+      String message = "G1";
+      pose.forEach((poseKey, poseValue) {
+        message = "${message} ${poseKey}${poseValue}";
+      });
+      _sendMessage(message);
       await Future.delayed(const Duration(seconds: 3), () => "3");
       index += 1;
       if (index >= DemoPoses.poses.length) index = 0;
