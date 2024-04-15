@@ -4,6 +4,7 @@ import 'console.dart';
 import 'axis_slider.dart';
 import 'button_mappings.dart';
 import 'diagram.dart';
+import 'demo_poses.dart' as DemoPoses;
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
+  bool _isDemoMode = false;
   final _axisValues = {
     'X': 0.0,
     'Y': 0.0,
@@ -80,7 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
           getAxis: _getAxis,
           setAxis: _setAxis,
         ),
-        ButtonCard(sendMessage: _sendMessage)
+        ButtonCard(
+            sendMessage: _sendMessage,
+            toggleDemo: _toggleDemo,
+            demoBool: _isDemoMode),
       ])),
     ]));
   }
@@ -93,5 +98,43 @@ class _MyHomePageState extends State<MyHomePage> {
   void _appendLog(String entry) {
     _logList.insert(0, entry);
     while (_logList.length > 50) _logList.removeAt(0);
+  }
+
+  Future<void> _toggleDemo() async {
+    setState(() {
+      _isDemoMode = !_isDemoMode;
+    });
+    await _demoMode();
+  }
+
+  Future<void> _demoMode() async {
+    var index = 0;
+    while (_isDemoMode) {
+      Map<String, double> pose = DemoPoses.poses[index];
+      await _smoothStep(_axisValues, pose);
+      await Future.delayed(const Duration(seconds: 3), () => "3");
+      index += 1;
+      if (index >= DemoPoses.poses.length) index = 0;
+    }
+  }
+
+  Future<void> _smoothStep(start, target) async {
+    while (!DemoPoses.isAtTarget(start, target)) {
+      setState(() {
+        start.forEach((startKey, startValue) {
+          startValue = startValue.round();
+          var targetValue = target[startKey];
+          if (targetValue != null) {
+            var deviation = startValue.round() - targetValue;
+            if (deviation > 0) {
+              start[startKey] -= 1;
+            } else if (deviation < 0) {
+              start[startKey] += 1;
+            }
+          }
+        });
+      });
+      await Future.delayed(const Duration(milliseconds: 10), () => "1");
+    }
   }
 }

@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ButtonCard extends StatefulWidget {
-  const ButtonCard({super.key, required this.sendMessage});
+  const ButtonCard(
+      {super.key,
+      required this.sendMessage,
+      required this.toggleDemo,
+      required this.demoBool});
   final Function sendMessage;
+  final Function toggleDemo;
+  final bool demoBool;
 
   @override
   State<ButtonCard> createState() => _ButtonCardState();
@@ -33,6 +39,14 @@ class _ButtonCardState extends State<ButtonCard> {
         IconButton(
           icon: const Icon(Icons.shuffle),
           onPressed: _shuffle,
+        ),
+        IconButton(
+          icon: widget.demoBool
+              ? const Icon(Icons.pause)
+              : const Icon(Icons.play_arrow),
+          onPressed: () async {
+            await widget.toggleDemo();
+          },
         ),
       ])
     ]));
