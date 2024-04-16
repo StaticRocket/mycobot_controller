@@ -19,22 +19,6 @@ class Console extends StatefulWidget {
 
 class _ConsoleState extends State<Console> {
   final TextEditingController _controller = TextEditingController();
-  var _subscription;
-
-  @override
-  initState() {
-    super.initState();
-    _subscription = widget.channel.stream.listen((message) {
-      widget.appendLog("${message}");
-    });
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-
-    _subscription.cancel();
-  }
 
   @override
   Widget build(BuildContext context) {

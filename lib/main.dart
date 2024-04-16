@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
   bool _isDemoMode = false;
+  var _subscription;
   final _axisValues = {
     'X': 0.0,
     'Y': 0.0,
@@ -58,6 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
     double? value = _axisValues[axis];
     if (value is double) return value;
     return 0;
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _subscription = _channel.stream.listen((message) {
+      _appendLog("${message}");
+    });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+
+    _subscription.cancel();
   }
 
   @override
