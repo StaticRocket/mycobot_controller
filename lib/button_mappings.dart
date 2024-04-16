@@ -71,12 +71,15 @@ class _ButtonCardState extends State<ButtonCard> {
     switch (selection) {
       case 0:
         widget.appendLog("~ I picked rock!");
+        widget.sendMessage("G1 X57 Y-65 Z-120 A95 B0 C0");
         break;
       case 1:
         widget.appendLog("~ I picked paper!");
+        widget.sendMessage("G1 X29 Y-86 Z-57 A49 B0 C0");
         break;
       case 2:
         widget.appendLog("~ I picked scissors!");
+        widget.sendMessage("G1 X-5 Y-86 Z-57 A49 B0 C0");
         break;
     }
   }
