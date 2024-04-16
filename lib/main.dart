@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await _smoothStep(_axisValues, pose);
       String message = "G1";
       pose.forEach((poseKey, poseValue) {
-        message = "${message} ${poseKey}${poseValue}";
+        message = "${message} ${poseKey}${poseValue.toStringAsFixed(0)}";
       });
       _sendMessage(message);
       await Future.delayed(const Duration(seconds: 3), () => "3");
