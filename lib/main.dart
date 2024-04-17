@@ -39,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
   bool _isDemoMode = false;
+  var _isInteractive = false;
   var _subscription;
   final _axisValues = {
     'X': 0.0,
@@ -79,33 +80,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      Expanded(
-        child: Row(children: [
-          Expanded(child: DiagramCard()),
+    return Listener(
+        onPointerDown: _setInteractive,
+        child: Scaffold(
+            body: Column(children: [
           Expanded(
-            child: Console(
-                channel: _channel,
-                logList: _logList,
+            child: Row(children: [
+              Expanded(child: DiagramCard()),
+              Expanded(
+                child: Console(
+                    channel: _channel,
+                    logList: _logList,
+                    sendMessage: _sendMessage,
+                    appendLog: _appendLog),
+              )
+            ]),
+          ),
+          Expanded(
+              child: Row(children: [
+            AxisSliderCard(
+              getAxis: _getAxis,
+              setAxis: _setAxis,
+            ),
+            ButtonCard(
                 sendMessage: _sendMessage,
+                toggleDemo: _toggleDemo,
+                demoBool: _isDemoMode,
                 appendLog: _appendLog),
-          )
-        ]),
-      ),
-      Expanded(
-          child: Row(children: [
-        AxisSliderCard(
-          getAxis: _getAxis,
-          setAxis: _setAxis,
-        ),
-        ButtonCard(
-            sendMessage: _sendMessage,
-            toggleDemo: _toggleDemo,
-            demoBool: _isDemoMode,
-            appendLog: _appendLog),
-      ])),
-    ]));
+          ])),
+        ])));
   }
 
   void _sendMessage(String message) {
@@ -119,6 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _setInteractive(movement) {
+    _isInteractive = true;
+  }
+
   Future<void> _toggleDemo() async {
     setState(() {
       _isDemoMode = !_isDemoMode;
@@ -130,20 +137,27 @@ class _MyHomePageState extends State<MyHomePage> {
     var index = 0;
     while (_isDemoMode) {
       Map<String, double> pose = DemoPoses.poses[index];
-      await _smoothStep(_axisValues, pose);
-      String message = "G1";
-      pose.forEach((poseKey, poseValue) {
-        message = "${message} ${poseKey}${poseValue.toStringAsFixed(0)}";
-      });
-      _sendMessage(message);
-      await Future.delayed(const Duration(seconds: 3), () => "3");
+      if (_isInteractive) {
+        await Future.delayed(const Duration(seconds: 15));
+        _isInteractive = false;
+      } else {
+        await _smoothStep(_axisValues, pose);
+        String message = "G1";
+        pose.forEach((poseKey, poseValue) {
+          message = "${message} ${poseKey}${poseValue.toStringAsFixed(0)}";
+        });
+        _sendMessage(message);
+        await Future.delayed(const Duration(seconds: 3));
+      }
       index += 1;
       if (index >= DemoPoses.poses.length) index = 0;
     }
   }
 
   Future<void> _smoothStep(start, target) async {
-    while (!DemoPoses.isAtTarget(start, target)) {
+    while (!DemoPoses.isAtTarget(start, target) &&
+        _isDemoMode &&
+        !_isInteractive) {
       setState(() {
         start.forEach((startKey, startValue) {
           var targetValue = target[startKey];
