@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _channel =
-      WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
+      WebSocketChannel.connect(Uri.parse('ws://10.200.200.1:8765'));
   final _logList = <String>[];
   bool _isDemoMode = false;
   var _isInteractive = false;
