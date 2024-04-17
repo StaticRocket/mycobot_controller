@@ -59,8 +59,8 @@ class _AxisSliderState extends State<AxisSlider> {
             quarterTurns: 3,
             child: Slider(
                 value: widget.getAxis(widget.axis),
-                min: -120,
-                max: 120,
+                min: -100,
+                max: 100,
                 onChanged: (updateValue) {
                   setState(() {
                     widget.setAxis(widget.axis, updateValue, false);
