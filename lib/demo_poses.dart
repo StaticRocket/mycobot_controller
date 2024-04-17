@@ -10,7 +10,7 @@ const poses = [
 bool isAtTarget(start, target) {
   bool atTarget = true;
   start.forEach((startKey, startValue) {
-    atTarget &= startValue == target[startKey];
+    atTarget &= (startValue - target[startKey] < 1);
   });
   return atTarget;
 }

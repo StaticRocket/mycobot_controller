@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _channel =
-      WebSocketChannel.connect(Uri.parse('ws://10.200.200.1:8765'));
+      WebSocketChannel.connect(Uri.parse('ws://localhost:8765'));
   final _logList = <String>[];
   bool _isDemoMode = false;
   var _subscription;
@@ -146,10 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
     while (!DemoPoses.isAtTarget(start, target)) {
       setState(() {
         start.forEach((startKey, startValue) {
-          startValue = startValue.round();
           var targetValue = target[startKey];
           if (targetValue != null) {
-            var deviation = startValue.round() - targetValue;
+            var deviation = startValue - targetValue;
             if (deviation > 0) {
               start[startKey] -= 1;
             } else if (deviation < 0) {
